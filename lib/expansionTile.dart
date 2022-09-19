@@ -13,7 +13,7 @@ class Expansiontile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         child: Column(
           children: <Widget>[
-            SizedBox(height:20.0),
+            SizedBox(height:20.0,width: 20,),
             ExpansionTile(
               title: Text(
                 "Title",

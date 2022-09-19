@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:emotion_log/widgets/emojis.dart';
+
 class Expansionpanel extends StatefulWidget {
   Expansionpaneltate createState() =>  Expansionpaneltate();
 }
@@ -6,6 +8,7 @@ class NewItem {
   bool isExpanded;
   final String header;
   final Widget body;
+
   NewItem(this.isExpanded, this.header, this.body);
 }
 class Expansionpaneltate extends State<Expansionpanel> {
@@ -14,24 +17,23 @@ class Expansionpaneltate extends State<Expansionpanel> {
         false, // isExpanded ?
         'Positive', // header
         Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-                children: <Widget>[
-                  Text('data'),
-                  Text('data'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Text('data'),
-                      Text('data'),
-                      Text('data'),
+            padding: EdgeInsets.all(8.0),
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: <Widget>[
+                for(var face in emojis) ElevatedButton(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 80, width: 80,child: Image.asset('assets/images/${face.path}',fit: BoxFit.fitHeight,)),
+                      SizedBox(height: 10,),
+                      SizedBox(height: 15, child: Text(face.name),)
                     ],
                   ),
-                  Radio(value: null, groupValue: null, onChanged: null)
-                ]
-            )
-        ), // body
-        //Icon(Icons.image) // iconPic
+                  onPressed: null,
+                )
+              ],
+            )) // iconPic
     ),
 
     NewItem(

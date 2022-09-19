@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emotion_log/home.dart';
+import 'package:emotion_log/log_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Home(),
+      home: LogScreen(),
     );
   }
 }

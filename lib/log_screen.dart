@@ -3,7 +3,7 @@ import 'package:emotion_log/expansionPanel.dart';
 import 'package:emotion_log/expansionTile.dart';
 
 
-class Home extends StatelessWidget {
+class LogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
