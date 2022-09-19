@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:emotion_log/widgets/emojis.dart';
+import 'package:emotion_log/main.dart';
 
 class Expansionpanel extends StatefulWidget {
   Expansionpaneltate createState() =>  Expansionpaneltate();
@@ -12,25 +13,32 @@ class NewItem {
   NewItem(this.isExpanded, this.header, this.body);
 }
 class Expansionpaneltate extends State<Expansionpanel> {
+
   List<NewItem> items = <NewItem>[
     NewItem(
         false, // isExpanded ?
         'Positive', // header
         Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(1.0),
             child: Wrap(
-              spacing: 10,
+              spacing: 8,
               runSpacing: 10,
               children: <Widget>[
-                for(var face in emojis) ElevatedButton(
-                  child: Column(
+                for(var face in emojis) SizedBox(
+                  height: 90,
+                  width: 85,
+                  child: ElevatedButton(
+                    child: Column(
                     children: [
-                      SizedBox(height: 80, width: 80,child: Image.asset('assets/images/${face.path}',fit: BoxFit.fitHeight,)),
-                      SizedBox(height: 10,),
-                      SizedBox(height: 15, child: Text(face.name),)
+                      SizedBox(height: 4,),
+                      SizedBox(height: 60, width: 60,child: Image.asset('assets/images/${face.path}',fit: BoxFit.scaleDown,)),
+                      SizedBox(height: 4,),
+                      SizedBox(child: Text(face.name, style: TextStyle(color: Colors.black, fontSize: 9),),),
                     ],
                   ),
-                  onPressed: null,
+                    onPressed: () {
+                    },
+                  ),
                 )
               ],
             )) // iconPic
@@ -61,6 +69,7 @@ class Expansionpaneltate extends State<Expansionpanel> {
     ),
   ];
   late ListView List_Criteria;
+  bool isPressed = false;
   Widget build(BuildContext context) {
     List_Criteria = ListView(
       children: [
@@ -103,3 +112,4 @@ class Expansionpaneltate extends State<Expansionpanel> {
     return scaffold;
   }
 }
+
