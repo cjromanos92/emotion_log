@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:emotion_log/widgets/emojis.dart';
+import 'package:very_good_analysis/very_good_analysis.dart';
 
 void main() => runApp(const MyApp());
 
@@ -31,7 +32,7 @@ class Panel {
   Panel(this.title, this.body, [this.isExpanded = false]);
 
   String title;
-  List<Widget> body;
+  List<Emoji> body;
   bool isExpanded;
 }
 
@@ -43,44 +44,45 @@ List<Panel> getPanels() {
   for (var cat in catList) {
     List<Emoji> emojiTemp = getEmojiByCategory(cat);
     List<Widget> emojiWidgets = [];
-    for (var emoji in emojiTemp) {
-      emojiWidgets.add(SizedBox(
-        height: 90,
-        width: 85,
-        child: ElevatedButton(
-          onPressed: () {
-            print('BEFORE $selected');
-            //set State
-            print('AFTER $selected');
-          },
-          child: Column(
-            children: [
-              SizedBox(
-                height: 4,
-              ),
-              SizedBox(
-                  height: 60,
-                  width: 60,
-                  child: Image.asset(
-                    'assets/images/${emoji.path}',
-                    fit: BoxFit.scaleDown,
-                  )),
-              SizedBox(
-                height: 4,
-              ),
-              SizedBox(
-                child: Text(
-                  emoji.name,
-                  style: TextStyle(color: Colors.black, fontSize: 9),
-                ),
-              ),
-            ],
-          ),
-          style: (selected = false) ? ElevatedButton.styleFrom(backgroundColor: Colors.red) : ElevatedButton.styleFrom(backgroundColor: Colors.green),
-        ),
-      ));
-    }
-    panelList.add(Panel(cat, emojiWidgets));
+
+    // for (var emoji in emojiTemp) {
+    //   emojiWidgets.add(SizedBox(
+    //     height: 90,
+    //     width: 85,
+    //     child: ElevatedButton(
+    //       onPressed: () {
+    //         print('BEFORE $selected');
+    //         //set State
+    //         print('AFTER $selected');
+    //       },
+    //       child: Column(
+    //         children: [
+    //           SizedBox(
+    //             height: 4,
+    //           ),
+    //           SizedBox(
+    //               height: 60,
+    //               width: 60,
+    //               child: Image.asset(
+    //                 'assets/images/${emoji.path}',
+    //                 fit: BoxFit.scaleDown,
+    //               )),
+    //           SizedBox(
+    //             height: 4,
+    //           ),
+    //           SizedBox(
+    //             child: Text(
+    //               emoji.name,
+    //               style: TextStyle(color: Colors.black, fontSize: 9),
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //       style: (selected = false) ? ElevatedButton.styleFrom(backgroundColor: Colors.red) : ElevatedButton.styleFrom(backgroundColor: Colors.green),
+    //     ),
+    //   ));
+    // }
+    panelList.add(Panel(cat, emojiTemp));
   }
   return panelList;
 }
@@ -117,6 +119,8 @@ class Panels extends StatefulWidget {
 
 class _PanelsState extends State<Panels> {
   final List<Panel> _panels = getPanels();
+  bool selected = false;
+  List<Emoji> journalEntry = [];
 
   @override
   Widget build(BuildContext context) {
@@ -127,11 +131,48 @@ class _PanelsState extends State<Panels> {
     );
   }
 
-  Widget _renderEmojis() {
-    return Wrap(
+  List<Widget> _renderEmojis(emojiList) {
+    List<Widget> emojiWidgets = [];
+    for(var emoji in emojiList){
+        emojiWidgets.add(SizedBox(
+          height: 90,
+          width: 85,
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                selected = !selected;
+              });
+            },
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 4,
+                ),
+                SizedBox(
+                    height: 60,
+                    width: 60,
+                    child: Image.asset(
+                      'assets/images/${emoji.path}',
+                      fit: BoxFit.scaleDown,
+                    )),
+                SizedBox(
+                  height: 4,
+                ),
+                SizedBox(
+                  child: Text(
+                    emoji.name,
+                    style: TextStyle(color: Colors.black, fontSize: 9),
+                  ),
+                ),
+              ],
+            ),
+            style: (selected) ? ElevatedButton.styleFrom(backgroundColor: Colors.red) : ElevatedButton.styleFrom(backgroundColor: Colors.green),
+          ),
+        ));
+      }
+    return emojiWidgets;
+    }
 
-    );
-  }
 
 
 
@@ -150,7 +191,7 @@ class _PanelsState extends State<Panels> {
             );
           },
           body: Wrap(
-            children: panel.body,
+            children: _renderEmojis(panel.body),
           ),
           isExpanded: panel.isExpanded,
         );
