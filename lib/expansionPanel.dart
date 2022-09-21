@@ -1,101 +1,82 @@
-import 'package:flutter/material.dart';
 import 'package:emotion_log/widgets/emojis.dart';
-import 'package:emotion_log/main.dart';
+import 'package:flutter/material.dart';
 
-class Expansionpanel extends StatefulWidget {
-  Expansionpaneltate createState() =>  Expansionpaneltate();
+class LogScreen extends StatefulWidget {
+  @override
+  State<LogScreen> createState() => _LogScreenState();
 }
+
 class NewItem {
-  bool isExpanded;
+  bool isExpanded=false;
   final String header;
   final Widget body;
 
   NewItem(this.isExpanded, this.header, this.body);
 }
-class Expansionpaneltate extends State<Expansionpanel> {
 
-  List<NewItem> items = <NewItem>[
-    NewItem(
-        false, // isExpanded ?
-        'Positive', // header
-        Padding(
-            padding: EdgeInsets.all(1.0),
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 10,
-              children: <Widget>[
-                for(var face in emojis) SizedBox(
-                  height: 90,
-                  width: 85,
-                  child: ElevatedButton(
-                    child: Column(
-                    children: [
-                      SizedBox(height: 4,),
-                      SizedBox(height: 60, width: 60,child: Image.asset('assets/images/${face.path}',fit: BoxFit.scaleDown,)),
-                      SizedBox(height: 4,),
-                      SizedBox(child: Text(face.name, style: TextStyle(color: Colors.black, fontSize: 9),),),
-                    ],
-                  ),
-                    onPressed: () {
-                    },
-                  ),
-                )
-              ],
-            )) // iconPic
-    ),
-
-    NewItem(
-        false, // isExpanded ?
-        'Positive', // header
-        Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-                children: <Widget>[
-                  Text('data'),
-                  Text('data'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Text('data'),
-                      Text('data'),
-                      Text('data'),
-                    ],
-                  ),
-                  Radio(value: null, groupValue: null, onChanged: null)
-                ]
-            )
-        ), // body
-        //Icon(Icons.image) // iconPic
-    ),
-  ];
-  late ListView List_Criteria;
-  bool isPressed = false;
+class _LogScreenState extends State<LogScreen> {
+  @override
   Widget build(BuildContext context) {
-    List_Criteria = ListView(
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Emotion Log',
+        ),
+        centerTitle: true,
+        elevation: 0.0,
+      ),
+      body: buildPanels(getCategoryList()),
+    );
+  }
+
+  Widget buildPanels(List<String> categoryList) {
+    List<NewItem> finalPanels = [];
+    for (var category in categoryList) {
+      finalPanels.add(
+        NewItem(
+            false, // isExpanded ?
+            '$category'.toUpperCase(), // header
+            Padding(
+                padding: EdgeInsets.all(1.0),
+                child: Wrap(
+                    spacing: 8,
+                    runSpacing: 10,
+                    children: buildEmojiList(category))) // iconPic
+        ),
+      );
+    }
+    return ListView(
       children: [
         Padding(
           padding: EdgeInsets.all(10.0),
           child: ExpansionPanelList(
             expansionCallback: (int index, bool isExpanded) {
               setState(() {
-                items[index].isExpanded = !items[index].isExpanded;
+                print('Set State Hit');
+                bool clicked = finalPanels[index].isExpanded;
+                print(clicked);
+                clicked = !clicked;
+                print('This is $clicked');
+                finalPanels[index].isExpanded = clicked;
+                print('Final panels is ${finalPanels[index].isExpanded}');
+                //finalPanels[index].isExpanded = !finalPanels[index].isExpanded;
               });
             },
-            children: items.map((NewItem item) {
+            children: finalPanels.map((NewItem item) {
               return ExpansionPanel(
+                isExpanded: item.isExpanded,
                 headerBuilder: (BuildContext context, bool isExpanded) {
-                  return  ListTile(
-                      title:  Text(
+                  return ListTile(
+                      title: Text(
                         item.header,
                         textAlign: TextAlign.left,
-                        style:  TextStyle(
+                        style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.w400,
                         ),
-                      )
-                  );
+                      ));
                 },
-                isExpanded: item.isExpanded,
                 body: item.body,
               );
             }).toList(),
@@ -103,13 +84,55 @@ class Expansionpaneltate extends State<Expansionpanel> {
         ),
       ],
     );
-    Scaffold scaffold =  Scaffold(
-      appBar:  AppBar(
-        title:  Text("ExpansionPanelList"),
-      ),
-      body: List_Criteria,
-    );
-    return scaffold;
+  }
+
+  List<Widget> buildEmojiList(catOfPanel) {
+    List<Widget> emojiList = [];
+    for (var face in emojis) {
+      if (face.category == catOfPanel) {
+        emojiList.add(SizedBox(
+          height: 90,
+          width: 85,
+          child: ElevatedButton(
+            onPressed: () {},
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 4,
+                ),
+                SizedBox(
+                    height: 60,
+                    width: 60,
+                    child: Image.asset(
+                      'assets/images/${face.path}',
+                      fit: BoxFit.scaleDown,
+                    )),
+                SizedBox(
+                  height: 4,
+                ),
+                SizedBox(
+                  child: Text(
+                    face.name,
+                    style: TextStyle(color: Colors.black, fontSize: 9),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
+      } else {}
+    }
+    return emojiList;
+  }
+
+  List<String> getCategoryList() {
+    List<String> categoryList = [];
+    for (var face in emojis) {
+      if (categoryList.contains(face.category)) {
+      } else {
+        categoryList.add(face.category);
+      }
+    }
+    return categoryList;
   }
 }
-

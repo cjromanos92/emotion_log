@@ -43,7 +43,7 @@ class _LogScreenState extends State<LogScreen> {
                     spacing: 8,
                     runSpacing: 10,
                     children: buildEmojiList(category))) // iconPic
-            ),
+        ),
       );
     }
     return ListView(
@@ -69,13 +69,13 @@ class _LogScreenState extends State<LogScreen> {
                 headerBuilder: (BuildContext context, bool isExpanded) {
                   return ListTile(
                       title: Text(
-                    item.header,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ));
+                        item.header,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ));
                 },
                 body: item.body,
               );

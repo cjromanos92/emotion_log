@@ -56,7 +56,7 @@ List<Emoji> emojis = [
   Emoji(name: 'Serenity', path: 'Serenity.png', category: 'positive'),
   Emoji(name: 'Interest', path: 'Interest.png', category: 'neutral'),
   Emoji(name: 'Politeness', path: 'Politeness.png', category: 'neutral'),
-  Emoji(name: 'Surprise', path: 'Surprise.png', category: 'positive'),
+  Emoji(name: 'Surprise', path: 'Surprise.png', category: 'crazy'),
 
 
 
