@@ -2,7 +2,6 @@ import 'package:emotion_log/journal_screen.dart';
 import 'package:emotion_log/widgets/journal.dart';
 import 'package:flutter/material.dart';
 import 'package:emotion_log/widgets/emojis.dart';
-import 'package:emotion_log/journal_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -55,16 +54,17 @@ class MyHome extends StatelessWidget{
       floatingActionButton: FloatingActionButton.extended(
         label: const Text('Submit'),
         onPressed: () {
+          List<Emoji> tempEmoji = [];
           for (var pan in _panels) {
             for (var face in pan.body) {
               if (face.isSelected == true) {
-                entryEmojis.add(face);
+                // entryEmojis.add(face);
+                tempEmoji.add(face);
               }
             }
           }
           journal.add(JournalEntry(
-              selectedEmojis: entryEmojis, entryDate: DateTime.now()));
-          print(journal);
+              selectedEmojis: tempEmoji, entryDate: DateTime.now()));
         },
       ),
     );
