@@ -14,11 +14,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
-
-
     return MaterialApp(
       title: MyApp._title,
       home: MyHome(),
@@ -26,28 +23,40 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class MyHome extends StatelessWidget{
+class MyHome extends StatelessWidget {
   final List<String> catList = [];
   final List<Panel> _panels = getPanels();
   List<Emoji> entryEmojis = [];
   List<JournalEntry> journal = [];
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Text(MyApp._title),
-          actions: [ TextButton(
-            onPressed: (){
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => ShowJournal(journal: journal)));
-            },
-            child: Row(children: const [
-              ImageIcon(AssetImage('assets/images/journal.png'),color: Colors.white,),
-              SizedBox(width: 6,),
-              Text('JOURNAL',style: TextStyle(color: Colors.white)),
-              SizedBox(width: 6,)
-            ],),
-          )]),
+      appBar: AppBar(title: const Text(MyApp._title), actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ShowJournal(journal: journal)));
+          },
+          child: Row(
+            children: const [
+              ImageIcon(
+                AssetImage('assets/images/journal.png'),
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Text('JOURNAL', style: TextStyle(color: Colors.white)),
+              SizedBox(
+                width: 6,
+              )
+            ],
+          ),
+        )
+      ]),
       body: Panels(
         panels: _panels,
       ),
@@ -58,19 +67,33 @@ class MyHome extends StatelessWidget{
           for (var pan in _panels) {
             for (var face in pan.body) {
               if (face.isSelected == true) {
-                // entryEmojis.add(face);
                 tempEmoji.add(face);
+                face.isSelected=false;
               }
             }
           }
-          journal.add(JournalEntry(
-              selectedEmojis: tempEmoji, entryDate: DateTime.now()));
+          if (tempEmoji.isNotEmpty) {
+            journal.add(JournalEntry(
+                selectedEmojis: tempEmoji, entryDate: DateTime.now()));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.green.shade300,
+                content: Text(
+                  'Journal entry submitted!',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                )));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.red.shade300,
+                content: Text(
+                  'No emotions selected! Please try again.',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                )));
+          }
         },
       ),
     );
   }
 }
-
 
 class Panel {
   Panel(this.title, this.body, [this.isExpanded = false]);
@@ -129,9 +152,12 @@ class _PanelsState extends State<Panels> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [_renderPanels(),const SizedBox(height: 100,)]
-      ),
+      child: Column(children: [
+        _renderPanels(),
+        const SizedBox(
+          height: 100,
+        )
+      ]),
     );
   }
 

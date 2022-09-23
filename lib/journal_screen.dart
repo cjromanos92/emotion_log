@@ -31,8 +31,10 @@ class ShowJournal extends StatelessWidget {
         faceRow.add(ImageIcon(AssetImage('assets/images/${face.path}')));
       }
       String formattedDate = DateFormat.MMMMEEEEd().format(entry.entryDate);
-      tempEntry = Card(
-        child: Row(children: [Text('$formattedDate'),Row(children: faceRow,)]),);
+      tempEntry = Container(
+        child: Card(
+          child: Column(children: [Text('$formattedDate'),SizedBox(height: 8,), Wrap(children: faceRow,)]),),
+      );
       entries.add(tempEntry);
     }
     return entries;
