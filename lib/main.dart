@@ -1,6 +1,8 @@
+import 'package:emotion_log/journal_screen.dart';
 import 'package:emotion_log/widgets/journal.dart';
 import 'package:flutter/material.dart';
 import 'package:emotion_log/widgets/emojis.dart';
+import 'package:emotion_log/journal_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -13,53 +15,62 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final List<String> catList = [];
-  final List<Panel> _panels = getPanels();
 
   @override
   Widget build(BuildContext context) {
-    List<Emoji> entryEmojis = [];
-    List<JournalEntry> journal = [];
+
 
     return MaterialApp(
       title: MyApp._title,
-      home: Scaffold(
-        appBar: AppBar(
+      home: MyHome(),
+    );
+  }
+}
+
+class MyHome extends StatelessWidget{
+  final List<String> catList = [];
+  final List<Panel> _panels = getPanels();
+  List<Emoji> entryEmojis = [];
+  List<JournalEntry> journal = [];
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
           title: const Text(MyApp._title),
           actions: [ TextButton(
-                onPressed: (){
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => LoadJournal(journal)));
-                },
-                child: Row(children: const [
-                  ImageIcon(AssetImage('assets/images/journal.png'),color: Colors.white,),
-                  SizedBox(width: 6,),
-                  Text('JOURNAL',style: TextStyle(color: Colors.white)),
-                  SizedBox(width: 6,)
-                ],),
+            onPressed: (){
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => ShowJournal(journal: journal)));
+            },
+            child: Row(children: const [
+              ImageIcon(AssetImage('assets/images/journal.png'),color: Colors.white,),
+              SizedBox(width: 6,),
+              Text('JOURNAL',style: TextStyle(color: Colors.white)),
+              SizedBox(width: 6,)
+            ],),
           )]),
-        body: Panels(
-          panels: _panels,
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          label: const Text('Submit'),
-          onPressed: () {
-            for (var pan in _panels) {
-              for (var face in pan.body) {
-                if (face.isSelected == true) {
-                  entryEmojis.add(face);
-                }
+      body: Panels(
+        panels: _panels,
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text('Submit'),
+        onPressed: () {
+          for (var pan in _panels) {
+            for (var face in pan.body) {
+              if (face.isSelected == true) {
+                entryEmojis.add(face);
               }
             }
-            journal.add(JournalEntry(
-                selectedEmojis: entryEmojis, entryDate: DateTime.now()));
-            print(journal);
-          },
-        ),
+          }
+          journal.add(JournalEntry(
+              selectedEmojis: entryEmojis, entryDate: DateTime.now()));
+          print(journal);
+        },
       ),
     );
   }
 }
+
 
 class Panel {
   Panel(this.title, this.body, [this.isExpanded = false]);
